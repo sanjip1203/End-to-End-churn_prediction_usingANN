@@ -5,8 +5,15 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
 import pandas as pd 
 import pickle
 
-# Load the trained model
-model = tf.keras.models.load_model('model.h5')
+
+# Load model without compiling to bypass errors
+model = tf.keras.models.load_model("model.h5", compile=False)
+
+# Recompile the model with the correct loss function
+model.compile(optimizer="adam", loss=tf.keras.losses.BinaryCrossentropy(), metrics=["accuracy"])
+
+# Save the model again
+model.save("model_fixed.h5")
 
 # Load the encoder and scaler
 with open('label_encoder_gender.pkl', 'rb') as file:
